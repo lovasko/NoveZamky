@@ -1,5 +1,6 @@
 :- include('util.pl').
 :- include('io.pl').
+:- include('get.pl').
 :- initialization(main).
 
 main :-
@@ -7,5 +8,5 @@ main :-
 	open_file(File),
 	parse_sudoku(Sudoku),
 	sudoku(M, N, Numbers) = Sudoku,
-	print(M), print(N), print_list(Numbers).
+	get_row_values(Sudoku, 1, Values), print_list(Values).
 	
