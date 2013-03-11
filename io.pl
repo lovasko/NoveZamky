@@ -3,11 +3,14 @@ open_file(File) :-
 	catch(open(File, read, Stream), _, format('Error opening file %s', [File])),
 	set_input(Stream).
 
-% TODO - put numbers inside f() structure alongside with X and Y coordinates
-parse_numbers(List, Result) :-
+parse_numbers(M, N, Position, List, Result) :-
 	read(Number),
-	(Number = end_of_file, Result = List ;	
-		New = [Number | List], parse_numbers(New, Result)).
+	(Number = end_of_file, Result = List ;
+		X is Position mod (M * N),
+		Y is Position div (M * N),	
+		NewList = [ [X, Y, Number] | List ], 
+		NextPosition is Position + 1,
+		parse_numbers(M, N, NextPosition, NewList, Result)).
 
 
 parse_dimension(M, N) :-
@@ -16,5 +19,5 @@ parse_dimension(M, N) :-
 
 parse_sudoku(Sudoku) :-
 	parse_dimension(M, N),
-	parse_numbers([], Numbers),
+	parse_numbers(M, N, 0, [], Numbers),
 	Sudoku = sudoku(M, N, Numbers).
