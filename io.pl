@@ -4,21 +4,15 @@ open_file(File) :-
 	set_input(Stream).
 
 % TODO - put numbers inside f() structure alongside with X and Y coordinates
-parse_numbers(Old, New) :-
-	catch(read_integer(Number), _, Number = end_of_file),
-	(Number = end_of_file,
-		Old = New
-	)
-	;
-	(
-		append(Old, [Number], New),
-		parse_numbers(New, _)
-	).
+parse_numbers(List, Result) :-
+	read(Number),
+	(Number = end_of_file, Result = List ;	
+		New = [Number | List], parse_numbers(New, Result)).
 
 
 parse_dimension(M, N) :-
-	read_integer(M),
-	read_integer(N).
+	read(M),
+	read(N).
 
 parse_sudoku(Sudoku) :-
 	parse_dimension(M, N),
