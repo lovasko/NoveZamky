@@ -6,6 +6,10 @@ filter_same_row(Y, [H|T], Accu, Row) :-
     filter_same_row(Y, T, NewAccu, Row) 
   ; 
     filter_same_row(Y, T, Accu, Row)).
+
+%fsr(_, [], []) :- !.    
+%fsr(Y, [[X, Y, Value]|T], [[X, Y, Value]|Rest]) :- fsr(Y, T, Rest).
+%fsr(Y, [H|T], Rest) :- fsr(Y, T, Rest).
     
 filter_same_column(_, [], Accu, Accu).
 filter_same_column(X, [H|T], Accu, Column) :-
@@ -28,22 +32,39 @@ filter_same_area(X, Y, M, N, [H|T], Accu, Area) :-
 
 values_only([], Accu, Accu).
 values_only([H|T], Accu, Result) :-
-  [X, Y, Value] = H,
+  [_, _, Value] = H,
   NewAccu = [ Value | Accu ],
   values_only(T, NewAccu, Result).
 
-get_row_values(Sudoku, Y, Values) :-
-  Sudoku = sudoku(M, N, Fields),
+get_row_values(Sudoku, Field, Values) :-
+  Sudoku = sudoku(_, _, Fields),
+  Field = [_, Y, _],
   filter_same_row(Y, Fields, [], Row),
-  values_only(Row, [], Values).
+  delete(Row, Field, CorrectRow),
+  values_only(CorrectRow, [], Values).
   
-get_column_values(Sudoku, X, Values) :-
-  Sudoku = sudoku(M, N, Fields),
+get_column_values(Sudoku, Field, Values) :-
+  Sudoku = sudoku(_, _, Fields),
+  Field = [X, _, _],
   filter_same_column(X, Fields, [], Column),
-  values_only(Column, [], Values).
+  delete(Column, Field, CorrectColumn),
+  values_only(CorrectColumn, [], Values).
   
-get_area_values(Sudoku, X, Y, Values) :-
+get_area_values(Sudoku, Field, Values) :-
   Sudoku = sudoku(M, N, Fields),
+  Field = [X, Y, _],
   filter_same_area(X, Y, M, N, Fields, [], Area),
-  % TODO remove [X, Y, _]
-  values_only(Area, [], Values).
+  delete(Area, Field, CorrectArea),
+  values_only(CorrectArea, [], Values).
+  
+correct(Sudoku, Field, Correct) :-
+  get_row_values(Sudoku, Field, RowValues),
+  get_column_values(Sudoku, Field, ColumnValues),
+  get_area_values(Sudoku, Field, AreaValues),
+  Sudoku = sudoku(M, N, _),
+  MaxPossible is M * N,
+  !,
+  between(1, MaxPossible, Correct),
+  \+ member(Correct, RowValues),
+  \+ member(Correct, ColumnValues), 
+  \+ member(Correct, AreaValues).
