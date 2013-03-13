@@ -7,10 +7,6 @@ filter_same_row(Y, [H|T], Accu, Row) :-
   ; 
     filter_same_row(Y, T, Accu, Row)).
 
-%fsr(_, [], []).    
-%fsr(Y, [[X, Y, Value]|T], [[X, Y, Value]|Rest]) :- fsr(Y, T, Rest).
-%fsr(Y, [H|T], Rest) :- fsr(Y, T, Rest).
-    
 filter_same_column(_, [], Accu, Accu).
 filter_same_column(X, [H|T], Accu, Column) :-
   [Hx, _, _] = H,
@@ -29,7 +25,6 @@ filter_same_area(X, Y, M, N, [H|T], Accu, Area) :-
   ;
     filter_same_area(X, Y, M, N, T, Accu, Area)).
     
-
 values_only([], Accu, Accu).
 values_only([H|T], Accu, Result) :-
   [_, _, Value] = H,
@@ -69,67 +64,39 @@ correct(Sudoku, Field, Correct) :-
   \+ member(Correct, ColumnValues), 
   \+ member(Correct, AreaValues).
 
-% zober uz doteraz vyplnene
-% % spocitaj pre kazde nevyplnene vyplnenych susedov
-% % vyber najviac zo susedmi v liste hotovych, daj ho do listu hotovych
-% % zavolaj sa na zbytok zoznamu okrem toho prvku
-
-% pamatame si kde sme uz boli, pricom zaciname s already_done.
-% zober prvok s najvacsim poctom prvkov na riadku/stlpci/arei medzi videnymi
-% tento prvok vloz do videnych,
-% na zbytok prvkov zavolaj "zober prvok s najvacsim ..."
-
-%VITAZ
-% na zaciatku ohodnot podla susedov - daj len nulove Values
-% dvojice [Field, Neighbours]
-% % prejdi a najdi najvacsie Neighbours
-% % prejdi a nastav jeho susedom vacsi Neighbours
-% % daj ho do listu
-% % prejdi a najdi najvacsie Neighbours
-  %% aka je koncova podmienka? ked Seen + Initial = Fields
-
 is_neighbour([X1, Y1, _], [X2, Y2, _]) :-
   abs(X1 - X2) =< 1, abs(Y1 - Y2) =< 1.
 
-neighbours_for_field([], _, 0).
-neighbours_for_field([H|T], Field, Count) :-
-  is_neighbour(H, Field),
-  NewCount is Count + 1,
-  neighbours_for_field(T, Field, NewCount)
-  ;
-  neighbours_for_field(T, Field, Count).
-  
-% spocitaj pre kazdeho pocet susedov z videnych
-% vysortuj
-% zober najvacsieho, odstran ho, daj ho do videnych  
-% rekurzia
-
-%nff([], _, 0).
-%nff([H|T], Field, Count) :- is_neighbour(H, Field), NC is Count + 1.
-%nff([H|T], Field, Count) :- nff(T, Field, Count). 
-
+% neighbours for field  
 nff([], _, []).
-nff([H|T], Field, [H|Ns]) :- is_neighbour(H, Field), nff(T, Field, Ns).
-nff([H|T], Field, Ns) :- nff(T, Field, Ns).
+nff([H|T], Field, [H|Ns]) :-
+  is_neighbour(H, Field), 
+  nff(T, Field, Ns).
+nff([H|T], Field, Ns) :-
+  nff(T, Field, Ns).
 
-count_ns(Fields, Field, Tuple) :- nff(Fields, Field, Ns), length(Ns, Count), Tuple = Count-Field.
-
+% count neighbours
+count_ns(Fields, Field, Tuple) :- 
+  nff(Fields, Field, Ns), 
+  length(Ns, Count), 
+  Tuple = Count-Field.
 
 listify1([], _, []).
 listify1(Fields, Seen, [Field|ListedFields]) :-
   maplist(count_ns(Seen), Fields, Tuples),
   keysort(Tuples, SortedTuples),
   reverse(SortedTuples, ReversedSortedTuples),
-  [First|_] = ReversedSortedTuples,
-  Count-Field = First,
+  [Count-Field|_] = ReversedSortedTuples,
   print(Field),
   delete(Fields, Field, NewFields),
   listify1(NewFields, [Field|Seen], ListedFields).
 
 already_done([], []).
 already_done([H|T], Initial) :-
-  H = [_, _, Value], Value = 0, already_done(T, Initial).
-already_done([H|T], [H|Initial]) :- already_done(T, Initial).
+  H = [_, _, 0], 
+  already_done(T, Initial).
+already_done([H|T], [H|Initial]) :- 
+  already_done(T, Initial).
   
 subtract([], _, []) :- !.
 subtract([A|C], B, D) :-
@@ -143,7 +110,3 @@ listify(Sudoku, List) :-
   already_done(Fields, Initial),
   subtract(Fields, Initial, FieldsZero),
   listify1(FieldsZero, Initial, List).
-  
-  
-  
-  

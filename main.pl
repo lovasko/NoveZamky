@@ -1,7 +1,7 @@
 :- include('util.pl').
 :- include('io.pl').
 :- include('get.pl').
-:- initialization(main).
+:- initialization(main(L)).
 
 main(List) :-
 	getopt(File),
