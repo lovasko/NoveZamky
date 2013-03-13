@@ -3,9 +3,9 @@
 :- include('get.pl').
 :- initialization(main).
 
-main :-
+main(List) :-
 	getopt(File),
 	open_file(File),
 	parse_sudoku(Sudoku),
-	correct(Sudoku, [0, 0, _], C), print(C).
+	listify(Sudoku, List).
 	
