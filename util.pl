@@ -4,7 +4,7 @@ print_list([]) :- print('.').
 print_list([H|T]) :-
 	print(H),
 	(T = [] ; print(', ')),
-	print_list(T).
+	print_list(T), !.
 
 % print_sudoku1(+ValuesList)
 % TODO add width parameter, which should be M*N
