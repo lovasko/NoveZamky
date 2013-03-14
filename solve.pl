@@ -1,10 +1,10 @@
 % correct(+Sudoku, +Field, -CorrectField)
 % computes correct Field value within Sudoku
 % returns also Field for easier handling in set_value
-correct(Sudoku, Field, CorrectField) :-
-	get_row_values(Sudoku, Field, RowValues),
-	get_column_values(Sudoku, Field, ColumnValues),
-	get_area_values(Sudoku, Field, AreaValues),
+correct(Sudoku, [X, Y, Value], CorrectField) :-
+	get_row_values(Sudoku, [X, Y, Value], RowValues),
+	get_column_values(Sudoku, [X, Y, Value], ColumnValues),
+	get_area_values(Sudoku, [X, Y, Value], AreaValues),
 	Sudoku = sudoku(M, N, _),
 	MaxPossible is M * N,
 	!,
@@ -12,7 +12,6 @@ correct(Sudoku, Field, CorrectField) :-
 	\+ member(Correct, RowValues),
 	\+ member(Correct, ColumnValues),
 	\+ member(Correct, AreaValues),
-	Field = [X, Y, _],
 	CorrectField = [X, Y, Correct].
 
 % solve(+Sudoku, +ListOfFields, -SolvedSudoku)
@@ -23,4 +22,6 @@ solve(Sudoku, [], Sudoku).
 solve(Sudoku, [H|OrderTail], SolvedSudoku) :-
 	correct(Sudoku, H, Correct),
 	set_value(Sudoku, H, Correct, NewSudoku),
+	print_sudoku(NewSudoku),
+	format('~n', _),
 	solve(NewSudoku, OrderTail, SolvedSudoku).

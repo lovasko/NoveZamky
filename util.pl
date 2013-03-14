@@ -14,7 +14,7 @@ print_sudoku1([H|Values]) :-
 	H = [X, Y, V],
 	print(V), print(' '),
 	(Y = 3, format('~n', _) ; true),
-	print_sudoku1(Values).
+	print_sudoku1(Values), !.
 
 % print_sudoku(+Sudoku)
 % preprocessing for print_sudoku1

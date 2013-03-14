@@ -28,7 +28,7 @@ already_done([H|T],[H|Initial]) :- already_done(T, Initial).
 % returns heuristically computed list of not-yet-set fields
 % heuristics: number of already set neighbours (in time)
 listify(sudoku(_, _, Fields), List) :-
-	already_done(Fields, Initial),
+	already_done(Fields, Initial), !,
 	subtract(Fields, Initial, FieldsZero),
 	listify1(FieldsZero, Initial, List).
 
@@ -40,4 +40,4 @@ listify1(Fields, Seen, [Field|ListedFields]) :-
 	reverse(SortedTuples, ReversedSortedTuples),
 	[Count-Field|_] = ReversedSortedTuples,
 	delete(Fields, Field, NewFields),
-	listify1(NewFields, [Field|Seen], ListedFields).
+	listify1(NewFields, [Field|Seen], ListedFields), !.
