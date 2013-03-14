@@ -3,8 +3,9 @@
 :- include('get_set.pl').
 :- include('listify.pl').
 :- include('solve.pl').
-:- initialization(main(S)).
+:- initialization(main(_)).
 
+% main(-SolvedSudoku)
 main(SolvedSudoku) :-
 	getopt(File),
 	open_file(File),
