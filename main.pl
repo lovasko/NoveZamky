@@ -1,7 +1,9 @@
 :- include('util.pl').
 :- include('io.pl').
-:- include('get.pl').
-:- initialization(main(Ss)).
+:- include('get_set.pl').
+:- include('listify.pl').
+:- include('solve.pl').
+:- initialization(main(S)).
 
 main(SolvedSudoku) :-
 	getopt(File),

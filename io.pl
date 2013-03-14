@@ -1,3 +1,14 @@
+getopt(File) :-
+	argument_list(ArgumentList),
+	(list_empty(ArgumentList),
+		print('Write file name containig sudoku: '),
+		read_token(File)
+	)
+	;
+	(
+		argument_value(1, File)
+	).
+
 % TODO - save error to variable and make recovery procedure with pattern matching
 open_file(File) :-
 	catch(open(File, read, Stream), _, format('Error opening file %s', [File])),
