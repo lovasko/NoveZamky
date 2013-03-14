@@ -52,7 +52,7 @@ get_area_values(Sudoku, Field, Values) :-
   delete(Area, Field, CorrectArea),
   values_only(CorrectArea, [], Values).
   
-correct(Sudoku, Field, Correct) :-
+correct(Sudoku, Field, CorrectField) :-
   get_row_values(Sudoku, Field, RowValues),
   get_column_values(Sudoku, Field, ColumnValues),
   get_area_values(Sudoku, Field, AreaValues),
@@ -62,7 +62,9 @@ correct(Sudoku, Field, Correct) :-
   between(1, MaxPossible, Correct),
   \+ member(Correct, RowValues),
   \+ member(Correct, ColumnValues), 
-  \+ member(Correct, AreaValues).
+  \+ member(Correct, AreaValues),
+  Field = [X, Y, _],
+  CorrectField = [X, Y, Correct].
 
 is_neighbour([X1, Y1, _], [X2, Y2, _]) :-
   abs(X1 - X2) =< 1, abs(Y1 - Y2) =< 1.
@@ -87,7 +89,7 @@ listify1(Fields, Seen, [Field|ListedFields]) :-
   keysort(Tuples, SortedTuples),
   reverse(SortedTuples, ReversedSortedTuples),
   [Count-Field|_] = ReversedSortedTuples,
-  print(Field),
+  %print(Field),
   delete(Fields, Field, NewFields),
   listify1(NewFields, [Field|Seen], ListedFields).
 
@@ -110,3 +112,35 @@ listify(Sudoku, List) :-
   already_done(Fields, Initial),
   subtract(Fields, Initial, FieldsZero),
   listify1(FieldsZero, Initial, List).
+  
+% solve(Sudoku, Order, SolvedSudoku) :-
+%   zober head z Orderu
+%   correctni ho
+%   vloz to do sudoku
+%   rekurzia na tail Orderu
+%   dno rekurzie - ked Order je nic, potom sudoku je sudoku
+
+set_value(Sudoku, Field, NewField, NewSudoku) :-
+  Sudoku = sudoku(M, N, Fields),
+  NewFields = [NewField|Fields],
+  delete(NewFields, Field, FinalFields),
+  NewSudoku = sudoku(M, N, FinalFields).
+% 
+
+print_sudoku1([]).
+print_sudoku1([H|Values]) :-
+  H = [X, Y, V],
+  print(V), print(' '),
+  (Y = 3, format('~n', _) ; true),
+  print_sudoku1(Values).
+
+print_sudoku(Sudoku) :-
+  Sudoku = sudoku(_, _, Values),
+  sort(Values, Sorted),
+  print_sudoku1(Sorted).
+
+solve(Sudoku, [], Sudoku).
+solve(Sudoku, [H|OrderTail], SolvedSudoku) :-
+  correct(Sudoku, H, Correct),
+  set_value(Sudoku, H, Correct, NewSudoku),
+  solve(NewSudoku, OrderTail, SolvedSudoku).
