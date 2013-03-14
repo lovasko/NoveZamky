@@ -2,6 +2,7 @@
 % tries to read commandline arguments
 % if none provided, asks user to specify file containing sudoku data
 % if provided, first parameter is used
+% this procedure outputs file name for sudoku data file
 getopt(File) :-
 	argument_list(ArgumentList),
 	ArgumentList = [], print('Write file name containig sudoku: '),	read_token(File)
@@ -46,4 +47,4 @@ parse_dimension(M, N) :-
 parse_sudoku(Sudoku) :-
 	parse_dimension(M, N),
 	parse_numbers(M, N, 0, [], Numbers),
-	Sudoku = sudoku(M, N, Numbers).
+	Sudoku = sudoku(M, N, Numbers), !.
