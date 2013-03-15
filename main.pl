@@ -16,4 +16,4 @@ main(SolvedSudoku) :-
 	print_sudoku(SolvedSudoku).
 
 main_false :- main(_), false.
-	
+main_false :- format('~nDone.~n', _).
