@@ -7,21 +7,25 @@ print_list([H|T]) :-
 	print_list(T), !.
 
 % print_sudoku1(+ValuesList)
-% TODO add width parameter, which should be M*N
 % BUG prints the sudoku rotated counter-clockwise 90 degrees
-print_sudoku1([]).
-print_sudoku1([H|Values]) :-
-	H = [X, Y, V],
-	print(V), print(' '),
-	(Y = 3, format('~n', _) ; true),
-	print_sudoku1(Values), !.
+print_sudoku1([], _).
+print_sudoku1([[_, Y, Value] | Fields], Width) :-
+	print(Value), print(' '),
+	(Y = Width, format('~n', _) ; true),
+	print_sudoku1(Fields, Width), !.
 
+reverse_xy([], []).
+reverse_xy([[X, Y, Value]|T], [[Y, X, Value] | U]) :- reverse_xy(T, U).
+
+	
 % print_sudoku(+Sudoku)
 % preprocessing for print_sudoku1
 print_sudoku(Sudoku) :-
-	Sudoku = sudoku(_, _, Values),
-	sort(Values, Sorted),
-	print_sudoku1(Sorted).
+	Sudoku = sudoku(M, N, Fields),
+	reverse_xy(Fields, Reversed),
+	sort(Reversed, Sorted),
+	Width is M*N - 1,
+	print_sudoku1(Sorted, Width).
 
 % subtract - copied from swi-pl 'listing(subtract)'
 subtract([], _, []) :- !.
