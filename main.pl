@@ -11,7 +11,7 @@ main(SolvedSudoku) :-
 	open_file(File),
 	parse_sudoku(Sudoku),
 	listify(Sudoku, List), !,
-	solve(Sudoku, List, SolvedSudoku),
+	solve(Sudoku, List, SolvedSudoku, 'nodebug'),
 	format('~nSolved sudoku: ~n', _),
 	print_sudoku(SolvedSudoku).
 	
