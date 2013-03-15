@@ -32,7 +32,12 @@ listify(sudoku(_, _, Fields), List) :-
 	subtract(Fields, Initial, FieldsZero),
 	listify1(FieldsZero, Initial, List).
 
-% TODO comment this
+% listify1(+FieldsList, +SeenFieldsList, -HeuristicList)
+% computional helper for listify/2
+% % compute Count of neighbours for each field in Fields, 
+% % % depending on current Seen
+% % sort by key (the Count)
+% % take first and add it to HeuristicList
 listify1([], _, []).
 listify1(Fields, Seen, [Field|ListedFields]) :-
 	maplist(count_ns(Seen), Fields, Tuples),

@@ -3,11 +3,8 @@
 % if none provided, asks user to specify file containing sudoku data
 % if provided, first parameter is used
 % this procedure outputs file name for sudoku data file
-getopt(File) :-
-	argument_list(ArgumentList),
-	ArgumentList = [], print('Write file name containig sudoku: '),	read_token(File)
-	;
-	argument_value(1, File).
+getopt(File) :-	argument_list(ArgumentList), ArgumentList = [], print('Write file name containig sudoku: '), read_token(File).
+getopt(File) :- argument_value(1, File).
 
 % open_file(+File)
 % opens File and uses it as stdin
