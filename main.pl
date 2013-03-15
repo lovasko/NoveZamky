@@ -3,7 +3,7 @@
 :- include('get_set.pl').
 :- include('listify.pl').
 :- include('solve.pl').
-:- initialization(main(_)).
+:- initialization(main_false).
 
 % main(-SolvedSudoku)
 main(SolvedSudoku) :-
@@ -14,4 +14,6 @@ main(SolvedSudoku) :-
 	solve(Sudoku, List, SolvedSudoku, 'nodebug'),
 	format('~nSolved sudoku: ~n', _),
 	print_sudoku(SolvedSudoku).
+
+main_false :- main(_), false.
 	
