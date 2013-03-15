@@ -14,9 +14,10 @@ print_sudoku1([[_, Y, Value] | Fields], Width) :-
 	(Y = Width, format('~n', _) ; true),
 	print_sudoku1(Fields, Width), !.
 
+% reverse_xy(+Fields, -ReversedXYFields)
+% Values stay intact, only X and Y swap for sorting purposes
 reverse_xy([], []).
 reverse_xy([[X, Y, Value]|T], [[Y, X, Value] | U]) :- reverse_xy(T, U).
-
 	
 % print_sudoku(+Sudoku)
 % preprocessing for print_sudoku1
