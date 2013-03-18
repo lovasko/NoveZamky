@@ -10,10 +10,12 @@ main(SolvedSudoku) :-
 	getopt(File),
 	open_file(File),
 	parse_sudoku(Sudoku),
+	format('Solving sudoku:~n', _),
+	print_sudoku(Sudoku),
 	listify(Sudoku, List), !,
 	solve(Sudoku, List, SolvedSudoku, 'nodebug'),
-	format('~nSolved sudoku: ~n', _),
+	format('~nPossible solution: ~n', _),
 	print_sudoku(SolvedSudoku).
 
 main_false :- main(_), false.
-main_false :- format('~nDone.~n', _).
+main_false :- format('Done.~n', _).
