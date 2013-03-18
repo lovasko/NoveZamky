@@ -2,10 +2,10 @@ all: sudoku.c
 	gcc -o sudoku sudoku.c -lcurses -DTEMPLATE=\"template\"
 
 generate:
-	bash generate.sh
+	@bash generate.sh
 
 solve:
-	bash solve.sh
+	@bash solve.sh
 
 clean:
 	rm sudoku
