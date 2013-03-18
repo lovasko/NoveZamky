@@ -29,21 +29,21 @@ values_only([[_, _, Value]|T], [Value|Values]) :- values_only(T, Values).
 get_row_values(sudoku(_, _, Fields), [X, Y, Value], Values) :-
 	filter_same_row(Y, Fields, Row),
 	delete(Row, [X, Y, Value], CorrectRow),
-	values_only(CorrectRow, [], Values).
+	values_only(CorrectRow, Values).
 
 % get_column_values(+Sudoku, +Field, -Values)
 % outputs only Values in Field's column (except Field's value itself)
 get_column_values(sudoku(_, _, Fields), [X, Y, Value], Values) :-
 	filter_same_column(X, Fields, Column),
 	delete(Column, [X, Y, Value], CorrectColumn),
-	values_only(CorrectColumn, [], Values).
+	values_only(CorrectColumn, Values).
 
 % get_area_values(+Sudoku, +Field, -Values)
 % outputs only Values in Field's area (except Field's value itself)
 get_area_values(sudoku(M, N, Fields), [X, Y, Value], Values) :-
 	filter_same_area(X, Y, M, N, Fields, Area),
 	delete(Area, [X, Y, Value], CorrectArea),
-	values_only(CorrectArea, [], Values).
+	values_only(CorrectArea, Values).
 
 % set_value(+Sudoku, +Field, +NewField, -SolvedSudoku)
 % replaces Field with NewField
