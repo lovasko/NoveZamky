@@ -23,7 +23,7 @@ listify(Method, sudoku(M, N, Fields), List) :-
 % % take first and add it to HeuristicList
 listify1(_, _, [], _, []).
 listify1(Method, Sudoku, Fields, Seen, [Field|ListedFields]) :-
-	(Method = relatives, maplist(count_relatives(Sudoku, Seen), Fields, Tuples) ; maplist(count_ns(Seen), Fields, Tuples)),
+	(Method = relatives, maplist(count_relatives(Sudoku, Seen), Fields, Tuples) ; maplist(count_neighbours(Seen), Fields, Tuples)),
 	keysort(Tuples, SortedTuples),
 	reverse(SortedTuples, ReversedSortedTuples),
 	[Count-Field|_] = ReversedSortedTuples,
