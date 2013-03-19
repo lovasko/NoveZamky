@@ -36,3 +36,16 @@ subtract([A|C], B, D) :-
 subtract([A|B], C, [A|D]) :-
 	subtract(B, C, D).
 
+% gtz(+List, -List)
+% only elements GreaterThanZero pass this filter
+gtz([], []).
+gtz([H|In], [H|Out]) :- H > 0, gtz(In, Out).
+gtz([_|In], Out) :- gtz(In, Out).
+
+% compress_consecutive(+List, -UniqueConsecutive)
+% ouputs only those elements, that are unique
+% requires duplicates to be listed together
+compress_consecutive([], []).
+compress_consecutive([H|T], U) :- U = [H|_], compress_consecutive(T, U).
+compress_consecutive([H|T], [H|U]) :- compress_consecutive(T, U).
+

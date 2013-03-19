@@ -7,12 +7,13 @@
 
 % main(-SolvedSudoku)
 main(SolvedSudoku) :-
-	getopt(File),
+	getopt(File, Method),
+	valid_method(Method),
 	open_file(File),
 	parse_sudoku(Sudoku),
 	format('Solving sudoku:~n', _),
 	print_sudoku(Sudoku),
-	listify(Sudoku, List), !,
+	listify(Method, Sudoku, List), !,
 	solve(Sudoku, List, SolvedSudoku, 'nodebug'),
 	format('~nPossible solution: ~n', _),
 	print_sudoku(SolvedSudoku).
