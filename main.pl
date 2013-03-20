@@ -3,6 +3,7 @@
 :- include('get_set.pl').
 :- include('listify.pl').
 :- include('solve.pl').
+:- include('adhoc.pl').
 :- initialization(main_false).
 
 :- dynamic(start_time/1).
