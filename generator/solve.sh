@@ -2,5 +2,10 @@
 
 for sudoku in generated_puzzles/*
 do
-	./../main "$sudoku"
+	echo "Using method 'neighbours'"
+	./../main "$sudoku" "neighbours"
+	echo
+	echo "Using method 'relatives'"
+	./../main "$sudoku" "relatives"
+	echo
 done
