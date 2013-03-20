@@ -26,6 +26,6 @@ listify1(Method, Sudoku, Fields, Seen, [Field|ListedFields]) :-
 	(Method = relatives, maplist(count_relatives(Sudoku, Seen), Fields, Tuples) ; maplist(count_neighbours(Seen), Fields, Tuples)),
 	keysort(Tuples, SortedTuples),
 	reverse(SortedTuples, ReversedSortedTuples),
-	[Count-Field|_] = ReversedSortedTuples,
+	[_-Field|_] = ReversedSortedTuples,
 	delete(Fields, Field, NewFields),
 	listify1(Method, Sudoku, NewFields, [Field|Seen], ListedFields), !.

@@ -2,13 +2,13 @@
 % outputs only RowFields (subset of Fields) that have equal X coordinate
 filter_same_row(_, [], []).
 filter_same_row(Y, [[X, Y, Value]|T], [[X, Y, Value]|Result]) :- filter_same_row(Y, T, Result).
-filter_same_row(Y, [H|T], Result) :- filter_same_row(Y, T, Result).
+filter_same_row(Y, [_|T], Result) :- filter_same_row(Y, T, Result).
 
 % filter_same_column(+X, +Fields, -ColumnFields)
 % outputs only ColumnFields (subset of Fields) that have equal Y coordinate
 filter_same_column(_, [], []).
 filter_same_column(X, [[X, Y, Value]|T], [[X, Y, Value]|Result]) :- filter_same_column(X, T, Result).
-filter_same_column(X, [H|T], Result) :- filter_same_column(X, T, Result).
+filter_same_column(X, [_|T], Result) :- filter_same_column(X, T, Result).
 
 % filter_same_area(+X, +Y, +M, +N, +Fields, -AreaFields)
 % outputs only AreaFields (subset of Fields) that are in the same area as [X, Y, _]

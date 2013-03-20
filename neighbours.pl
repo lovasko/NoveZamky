@@ -9,7 +9,7 @@ is_neighbour([X1, Y1, _], [X2, Y2, _]) :-
 % neighbours for Field from AlreadyDoneFields
 neighbours_for_field([], _, []).
 neighbours_for_field([H|T], Field, [H|Ns]) :- is_neighbour(H, Field), neighbours_for_field(T, Field, Ns).
-neighbours_for_field([H|T], Field, Ns)     :- neighbours_for_field(T, Field, Ns).
+neighbours_for_field([_|T], Field, Ns)     :- neighbours_for_field(T, Field, Ns).
 
 % count_ns(+AlreadyDoneFields, +Field, -Tuple)
 % count neighbours - Tuple's format is Count-Field
