@@ -23,11 +23,32 @@ main(SolvedSudoku) :-
 	format('~nPossible solution: ~n', _),
 	print_sudoku(SolvedSudoku).
 
-main_false :- 
-	main(_), 
+main_false :-
+	main(_),
 	false.
+main_false :- finish.
+
+% dynamic solving
+adhoc_main(SolvedSudoku) :-
+	getopt(File, _),
+	open_file(File),
+	parse_sudoku(Sudoku),
+	format('Solving sudoku:~n', _),
+	print_sudoku(Sudoku),
+	user_time(Start),
+	asserta(start_time(Start)), !,
+	adhoc(Sudoku, SolvedSudoku),
+	format('~nPossible solution: ~n', _),
+	print_sudoku(SolvedSudoku).
+
+adhoc_main_false :-
+	adhoc_main(_),
+	false.
+adhoc_main_false :- finish.
 	
-main_false :- 
+% finish
+% prints time difference
+finish :-
 	start_time(Start), 
 	user_time(End), 
 	Duration is End-Start,
