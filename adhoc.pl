@@ -24,7 +24,8 @@ adhoc(sudoku(M, N, Fields), sudoku(M, N, Fields)) :-
 adhoc(sudoku(M, N, Fields), Solved) :-
 	not_done_yet(Fields, NotDone),
 	maplist(count_correct(sudoku(M, N, Fields)), NotDone, Rated),
-	[Rate-Field|_] = Rated,
+	keysort(Rated, SortedRated),
+	[Rate-Field|_] = SortedRated,
 	correct(sudoku(M, N, Fields), Field, CorrectField),
 	set_value(sudoku(M, N, Fields), Field, CorrectField, NewSudoku),
 	adhoc(NewSudoku, Solved).
