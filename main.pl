@@ -52,4 +52,4 @@ finish :-
 	start_time(Start), 
 	user_time(End), 
 	Duration is End-Start,
-	format('Time: %dms~n', [Duration]).
+	format('Time: %dms~n', [Duration]), !.
