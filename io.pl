@@ -4,7 +4,7 @@ ask_for_file(File) :- print('Write file name containig sudoku: '), read_token(Fi
 
 % ask_for_method(-Method)
 % Method unifies with stdin
-ask_for_method(Method) :- print('Write solving method name (neighbours, relatives): '), read_token(Method).
+ask_for_method(Method) :- print('Write solving method name (neighbours, relatives, adhoc): '), read_token(Method).
 
 % getopt(-File, -Method)
 % tries to read commandline arguments
@@ -19,6 +19,7 @@ getopt(File, Method) :- argument_counter(3), argument_value(1, File), argument_v
 % used for checking of availability of user-chosen Method
 valid_method(neighbours).
 valid_method(relatives).
+valid_method(adhoc).
 valid_method(Method) :- format('ERROR: invalid method name "%s"~n', [Method]), fail.
 
 % open_file(+File)
