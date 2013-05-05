@@ -13,7 +13,7 @@ print_sudoku1([[_, Y, Value] | Fields], Width) :-
 	print(Value), print(' '),
 	(Y = Width, format('~n', _) ; true),
 	print_sudoku1(Fields, Width), !.
-
+	
 % reverse_xy(+Fields, -ReversedXYFields)
 % Values stay intact, only X and Y swap for sorting purposes
 reverse_xy([], []).
@@ -27,6 +27,11 @@ print_sudoku(Sudoku) :-
 	sort(Reversed, Sorted),
 	Width is M*N - 1,
 	print_sudoku1(Sorted, Width).
+	
+possible_solution(Sudoku) :-
+	format('Possible solution: ~n', _),
+	print_sudoku(Sudoku).
+
 
 % subtract - copied from swi-pl 'listing(subtract)'
 subtract([], _, []) :- !.
