@@ -12,7 +12,7 @@ already_done([H|T],[H|Initial]) :- already_done(T, Initial).
 % heuristics: number of already set neighbours (in time)
 listify(Method, sudoku(M, N, Fields), List) :-
 	already_done(Fields, Initial), !,
-	subtract(Fields, Initial, FieldsZero),
+	my_subtract(Fields, Initial, FieldsZero),
 	listify1(Method, sudoku(M, N, Fields), FieldsZero, Initial, List).
 
 % listify1(+FieldsList, +SeenFieldsList, -HeuristicList)

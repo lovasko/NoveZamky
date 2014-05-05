@@ -33,13 +33,13 @@ possible_solution(Sudoku) :-
 	print_sudoku(Sudoku).
 
 
-% subtract - copied from swi-pl 'listing(subtract)'
-subtract([], _, []) :- !.
-subtract([A|C], B, D) :-
+% my_subtract - copied from swi-pl 'listing(subtract)'
+my_subtract([], _, []) :- !.
+my_subtract([A|C], B, D) :-
 	memberchk(A, B), !,
-	subtract(C, B, D).
-subtract([A|B], C, [A|D]) :-
-	subtract(B, C, D).
+	my_subtract(C, B, D).
+my_subtract([A|B], C, [A|D]) :-
+	my_subtract(B, C, D).
 
 % gtz(+List, -List)
 % only elements GreaterThanZero pass this filter
