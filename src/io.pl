@@ -17,16 +17,24 @@ getopt(File, Method) :- argument_counter(3), argument_value(1, File), argument_v
 
 % valid_method(+Method)
 % used for checking of availability of user-chosen Method
-valid_method(neighbours).
-valid_method(relatives).
-valid_method(adhoc).
-valid_method(Method) :- format('ERROR: invalid method name "%s"~n', [Method]), fail.
+valid_method(string(neighbours)).
+valid_method(string(relatives)).
+valid_method(string(adhoc)).
+valid_method(Method) :- 
+	string(RawMethod) = Method, 
+	format('ERROR: invalid method name "%s"~n', [RawMethod]), 
+	fail.
 
 % open_file(+File)
 % opens File and uses it as stdin
 % TODO - save error to variable and make recovery procedure with pattern matching
 open_file(File) :-
-	catch(open(File, read, Stream), _, format('Error opening file %s', [File])),
+	string(RawFile) = File, 
+	catch(
+		open(RawFile, read, Stream), 
+		_, 
+		format('Error opening file %s', [File])
+	),
 	set_input(Stream).
 
 % parse_numbers(+M, +N, ?Position, +List, -Result)
