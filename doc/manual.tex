@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{amsmath}
+\newcommand{\BigO}[1]{\ensuremath{\operatorname{O}\bigl(#1\bigr)}}
+\begin{document}
+	\title{Prolog Sudoku Solver}
+	\author{Daniel Lovasko}
+	\date{}
+	\maketitle
+	
+	\section*{Introduction}
+	Sudoku solver written entirely in Prolog. Supports only square-shaped puzzles, but inner areas are allowed to be rectangular (ex. 20*20 puzzle may have inner areas 5*4, 4*5, 2*10, 10*2 configured in inverse).
+	\newline
+	\newline
+	\indent GNU Prolog was chosen as Prolog flavour, mainly due to licensing terms and nice IO library.
+	\newline
+	\newline
+	\indent Used puzzle representation: first one consiss of two integers, being the M, second N, whose meaning is discussed below. Each integer must be followed by a dot.
+	After, $(M*N)^2$ integers, each follwed by a dot, are expected. Each integer should be in range of $1$ to $M*N$. Zero is used for fields that need to be solved.
+
+	\section{Data Structures and API}
+	The puzzle is represented by {\tt sudoku/3} predicate. First argument is {\tt M}, the width of each inner area, second {\tt N}, the height of each inner area and finally {\tt Fields}, the list of fields.
+	Each field is represented by list of length 3, first two elements being the {\tt X}, {\tt Y} coordinates, last element being {\tt Value} of that field.
+	\newline
+	\newline
+	\indent	Manipulation with such data structure can be found in {\tt get\_set.pl} source file.
+	Read-only access to specified row can be done via {\tt filter\_same\_row/3}, with analogue procedures {\tt filter\_same\_column/3} and {\tt filter\_same\_area/3} for column and area respectively. These procedures take \BigO{(M*N)^2} time.
+	\newline
+	\newline
+	\indent	Write access is supported with {\tt set\_value/4} procedure. This procedure takes \BigO{(M*N)^2} time.
+
+	\section{Algorithms}
+	\subsection{Static}
+	The algorithm can be divided into two steps. First step is creating list of fields that were not pre-solved. Order of fields in this list based on heuristic approach. Each individual technique is described in its subsection.
+	\newline Second step is using Prolog's internal back-tracking engine to try to fill in each field, element by element.
+	\subsubsection{Relatives}
+	This heuristic ranks higher those fields, that have more fields in same column, row or area already solved, or added to list.
+	\subsubsection{Neighbours}
+	This heuristic ranks higher those fields, that have more fields solved or added to list from adjacent fields.
+	\subsection{Dynamic}
+	In each step of this algorithm, all yet unsolved fields are evaluated by heuristic - fields with less possible correct values are ranked higher - and than filled in. No list is being created, the actual puzzle is modified, so each step needs to recalculate the heuristic values.
+	\section{Generator}
+	IMPORTANT: I myself did not write this code, just copied it from FreeBSD ports collection. My contribution is the interface described below.
+	\subsection{make}
+	This command handles the compilation of the C source code. {\tt libcurses} is needed for compilation.
+	\subsection{make generate}
+	Uses the compiled binary sudoku generator to create a set of puzzles with size 3x3.
+	\subsection{make solve}
+	Invokes the compiled binary sudoku solver (written in Prolog) with each generated puzzle, for each solving technique.
+\end{document}
