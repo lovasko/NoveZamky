@@ -40,7 +40,7 @@ adhoc1(sudoku(M, N, Fields), Solved, NotDoneCount) :-
 	not_done_yet(Fields, NotDone),
 	maplist(count_correct(sudoku(M, N, Fields)), NotDone, Rated),
 	keysort(Rated, SortedRated),
-	[Rate-Field|_] = SortedRated,
+	[_-Field|_] = SortedRated,
 	correct(sudoku(M, N, Fields), Field, CorrectField),
 	set_value(sudoku(M, N, Fields), Field, CorrectField, NewSudoku),
 	NewNotDoneCount is NotDoneCount - 1,
